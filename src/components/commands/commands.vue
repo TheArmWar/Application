@@ -1,7 +1,11 @@
 <script setup>
 import Button from './button/button.vue'
 
+import rotate_cw_icon from '@/assets/rotate_cw_icon.png';
+import rotate_ccw_icon from '@/assets/rotate_ccw_icon.png';
 import release_icon from '@/assets/release_icon.png';
+import forward_icon from '@/assets/forward_icon.png';
+import backward_icon from '@/assets/backward_icon.png';
 import up_icon from '@/assets/up_icon.png';
 import press_icon from '@/assets/press_icon.png';
 import left_icon from '@/assets/left_icon.png';
@@ -24,18 +28,37 @@ const handleButtonClick = (buttonName, image) => {
   <div class="commands">
     <h1>Commands</h1>
     <div class="button-holder">
-      <Button :image="release_icon" @button-clicked="handleButtonClick" buttonName="release" />
-      <Button :image="up_icon" @button-clicked="handleButtonClick" buttonName="up" />
-      <Button :image="press_icon" @button-clicked="handleButtonClick" buttonName="press" />
+      <Button :image="release_icon" @button-clicked="handleButtonClick"
+        buttonName="release" />
+      <Button :image="up_icon" @button-clicked="handleButtonClick"
+        buttonName="up" />
+      <Button :image="press_icon" @button-clicked="handleButtonClick"
+        buttonName="press" />
 
-      <Button :image="left_icon" @button-clicked="handleButtonClick" buttonName="left" />
-      <Button :image="down_icon" @button-clicked="handleButtonClick" buttonName="down" />
-      <Button :image="right_icon" @button-clicked="handleButtonClick" buttonName="right" />
+      <Button :image="rotate_ccw_icon" @button-clicked="handleButtonClick"
+        buttonName="rotate_ccw" />
+      <Button :image="forward_icon" @button-clicked="handleButtonClick"
+        buttonName="forward" />
+      <Button :image="rotate_cw_icon" @button-clicked="handleButtonClick"
+        buttonName="rotate_cw" />
+
+      <Button :image="left_icon" @button-clicked="handleButtonClick"
+        buttonName="left" />
+      <Button :image="backward_icon" @button-clicked="handleButtonClick"
+        buttonName="backward" />
+      <Button :image="right_icon" @button-clicked="handleButtonClick"
+        buttonName="right" />
+
+      <Button :image="set_default_icon" @button-clicked="handleButtonClick"
+        buttonName="set-zero" />
+      <Button :image="down_icon" @button-clicked="handleButtonClick"
+        buttonName="down" />
+      <Button :image="reset_icon" @button-clicked="handleButtonClick"
+        buttonName="go-to_zero" />
 
       <div class="button-holder other-holder">
-        <Button other=true :image="set_default_icon" @button-clicked="" buttonName=" set-zero" />
-        <Button other=true :image="stop_icon" @button-clicked="" buttonName="stop" />
-        <Button other=true :image="reset_icon" @button-clicked="" buttonName="go-to-zero" />
+        <Button other=true :image="stop_icon" @button-clicked="handleButtonClick"
+          buttonName="stop" />
       </div>
     </div>
   </div>
@@ -61,6 +84,7 @@ h1 {
 
 .other-holder {
   margin-top: 30px;
+  grid-column: 2/3;
 }
 
 

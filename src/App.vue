@@ -26,19 +26,47 @@ function buildProtocolPayload(buttonName) {
   var command = null
 
   switch (buttonName) {
-    case 'right':
-      command = CommandType.Right;
-      break;
-
-    case 'left':
-      command = CommandType.Left;
-      break;
+    case 'release':
+      command = CommandType.Release
+      break
 
     case 'up':
-      command = CommandType.Up;
-      break;
+      command = CommandType.Up
+      break
 
-    // FIXME add the other commands and messages
+    case 'press':
+      command = CommandType.Grab
+      break
+
+    case 'rotate_ccw':
+      command = CommandType.RotateCcw
+      break
+
+    case 'forward':
+      command = CommandType.Forward
+      break
+
+    case 'rotate_cw':
+      command = CommandType.RotateCw
+      break
+
+    case 'left':
+      command = CommandType.Left
+      break
+
+    case 'backward':
+      command = CommandType.Backward
+      break
+
+    case 'right':
+      command = CommandType.Right
+      break
+
+    case 'down':
+      command = CommandType.Down
+      break
+
+    // FIXME add the other commands (set-zero and go-to-zero and stop) and messages
   }
 
   /* Build the payload object */
@@ -51,15 +79,22 @@ const handleClickParent = async (buttonName, image) => {
     currentSequence.value.push(image)
   }
   else {
+    if (currentDevice.value == null || currentDevice.value == "") {
+      alert("No device selected.")
+      return
+    }
+
     // Build a payload matching the buttonName command
     const payload = buildProtocolPayload(buttonName)
 
     console.log(payload);
 
+    const encodedPayload = protocol.encode(CommandType.TimedCommand, payload)
+
     // Sends the requests and wait for the response
-    const response = await fetch("http://172.20.10.5/", {
+    const response = await fetch(currentDevice.ip, {
       method: "POST",
-      body: payload,
+      body: encodedPayload,
     })
 
     // Gets the response body

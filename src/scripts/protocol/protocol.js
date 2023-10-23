@@ -14,7 +14,7 @@ export const CommandType = {
   Backward: 5,
   RotateCw: 6,
   RotateCcw: 7,
-  Grad: 8,
+  Grab: 8,
   Release: 9,
 }
 
