@@ -16,7 +16,7 @@ var protocol = null
 const allSequences = ref([])
 const allDevices = ref([])
 
-const currentDeviceName = ref('')
+const currentDevice = ref('')
 const isRecording = ref(false)
 const currentSequence = ref([])
 const currentSequenceName = ref('')
@@ -104,30 +104,47 @@ const handleNewSequence = () => {
 
 const handleNewDevice = () => {
   const deviceName = prompt("Please enter the device name", "New Device");
+  const deviceIp = prompt("Please enter the device ip", "192.168.1.0");
   if (deviceName == null || deviceName == "") {
     alert('Device name cannot be empty')
     return
   }
+
+  if (deviceIp == null || deviceIp == "") {
+    alert('Device ip cannot be empty')
+    return
+  }
+
   if (allDevices.value.find(device => device.name == deviceName)) {
     alert('Device name already exists')
     return
   }
 
-  if (allDevices.value.length == 0) {
-    currentDeviceName.value = deviceName
+  if (allDevices.value.find(device => device.ip == deviceIp)) {
+    alert('Device ip already exists')
+    return
   }
-  allDevices.value.push({
+
+  let newDevice = {
     name: deviceName,
+    ip: deviceIp,
     active: allDevices.value.length == 0,
     id: Date.now()
-  })
+  }
+
+  if (allDevices.value.length == 0) {
+    currentDevice.value = newDevice
+  }
+
+  allDevices.value.push(newDevice)
+
   console.log(allDevices.value)
 }
 
 const handleDeviceClicked = (deviceId) => {
   for (var i = 0; i < allDevices.value.length; i++) {
     if (allDevices.value[i].id == deviceId) {
-      currentDeviceName.value = allDevices.value[i].name
+      currentDevice.value = allDevices.value[i]
       break
     }
   }
@@ -161,10 +178,10 @@ const handleDeleteDevice = () => {
   }
 
   if (allDevices.value.length > 0) {
-    currentDeviceName.value = allDevices.value[0].name
+    currentDevice.value = allDevices.value[0]
   }
   else {
-    currentDeviceName.value = ''
+    currentDevice.value = ''
   }
 }
 
@@ -179,13 +196,16 @@ onMounted(async () => {
   <div class="container">
 
     <div class="main-container">
-      <Header :name="currentDeviceName" />
+      <Header :name="currentDevice.name" />
       <div class="content">
-        <Devices v-bind:allDevices="allDevices" @new-device="handleNewDevice" @device-clicked="handleDeviceClicked"
+        <Devices v-bind:allDevices="allDevices" @new-device="handleNewDevice"
+          @device-clicked="handleDeviceClicked"
           @delete-device="handleDeleteDevice" />
         <Commands @button-clicked-parent="handleClickParent" />
-        <Sequences @new-sequence="handleNewSequence" v-bind:isRecording="isRecording" v-bind:allSequences="allSequences"
-          @delete-sequence="handleDeleteSequence" @play-sequence="handlePlaySequence" />
+        <Sequences @new-sequence="handleNewSequence"
+          v-bind:isRecording="isRecording" v-bind:allSequences="allSequences"
+          @delete-sequence="handleDeleteSequence"
+          @play-sequence="handlePlaySequence" />
       </div>
     </div>
   </div>
